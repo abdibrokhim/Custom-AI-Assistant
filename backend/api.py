@@ -1,10 +1,12 @@
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 import uvicorn
 import chroma_cohere, chroma_chatgpt
+from tempfile import NamedTemporaryFile
+import os
 
 app = FastAPI()
 
@@ -17,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-current_file = "backend/files/sample.pdf"
+temp_file_path = ''
 
 
 @app.get("/")
@@ -27,21 +29,30 @@ async def read_root():
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
-    print('processing: ', file.filename)
-    with open(current_file, 'wb') as f:
-        f.write(await file.read())
-    print('saved file: ', current_file)
-    return FileResponse(current_file, filename='sample.pdf')
+    global temp_file_path
+    try:
+        # Save the file to a temporary file
+        with NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.filename)[1]) as temp_file:
+            contents = await file.read()
+            temp_file.write(contents)
+            temp_file_path = temp_file.name
+
+        return {"file_path": temp_file_path}
+    except Exception as e:        
+        # Cleanup if an error occurs
+        if os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/chat/cohere/{query}")
 def chat_cohere(query: str):
-    return chroma_cohere.generate_prompt(query, current_file)
+    return chroma_cohere.generate_prompt(query, temp_file_path)
 
 
 @app.get("/chat/chatgpt/{query}")
 def chat_chatgpt(query: str):
-    return chroma_chatgpt.generate_prompt(query, current_file)
+    return chroma_chatgpt.generate_prompt(query, temp_file_path)
 
 
 if __name__ == "__main__":

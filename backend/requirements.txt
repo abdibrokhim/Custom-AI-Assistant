@@ -2,3 +2,5 @@ chromadb
 langchain
 pymupdf
 cohere
+python-multipart
+langchain-community
