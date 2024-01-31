@@ -12,7 +12,7 @@ def generate_prompt(query, file_path):
     
     load_dotenv()
 
-    OPENAI_API_KEY=""
+    OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
                     
     try:
 

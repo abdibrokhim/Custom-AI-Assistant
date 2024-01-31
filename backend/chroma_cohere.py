@@ -12,7 +12,7 @@ def generate_prompt(query, file_path):
     
     load_dotenv()
 
-    COHERE_API_KEY=""
+    COHERE_API_KEY=os.getenv("COHERE_API_KEY")
                     
     try:
 
