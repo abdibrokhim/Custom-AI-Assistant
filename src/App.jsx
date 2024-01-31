@@ -14,9 +14,9 @@ const App = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationSeverity, setNotificationSeverity] = useState({severity: "info", message: "Test notification"});
 
-  let chatCohereURL = `https://44.226.145.213/chat/cohere/${input}`;
-  let chatChatGPTURL = `https://44.226.145.213/chat/chatgpt/${input}`;
-  let uploadURL = `https://44.226.145.213/upload`;
+  let chatCohereURL = `https://pdfcruncher.onrender.com/chat/cohere/${input}`;
+  let chatChatGPTURL = `https://pdfcruncher.onrender.com/chat/chatgpt/${input}`;
+  let uploadURL = `https://pdfcruncher.onrender.com/upload`;
 
   const showNotification = (severity) => {
     setNotificationSeverity(severity);
