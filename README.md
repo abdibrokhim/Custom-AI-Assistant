@@ -14,7 +14,7 @@ OpenAI - https://openai.com/
 Get Cohere API Key from https://cohere.ai/
 Get OpenAI API Key from https://beta.openai.com/
 
-Go to `backend` > `.env` and paste your 
+Go to `backend` and create file: `.env` and paste your 
 Cohere API key in the `COHERE_API_KEY="your-api-key"` field
 OpenAI API key in the `OPENAI_API_KEY="your-api-key"` field
 
@@ -90,4 +90,5 @@ Made with ❤️ by [Ibrohim Abdivokhidov](https://www.linkedin.com/in/abdibrokh
 
 
 ☕️ Buy me Coffee: https://www.buymeacoffee.com/abdibrokhim
+
 🫶 Support me on Patreon: https://www.patreon.com/abdibrokhim
