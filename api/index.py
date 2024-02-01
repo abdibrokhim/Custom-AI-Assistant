@@ -20,12 +20,12 @@ app.add_middleware(
 temp_file_path = ''
 
 
-@app.get("/")
+@app.get("/api")
 async def read_root():
     return {"message": "Hello World"}
 
 
-@app.post("/upload")
+@app.post("/api/upload")
 async def upload_file(file: UploadFile = File(...)):
     global temp_file_path
     try:
@@ -43,17 +43,15 @@ async def upload_file(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/chat/cohere/{query}")
+@app.get("/api/chat/cohere/{query}")
 def chat_cohere(query: str):
     return chroma_cohere.generate_prompt(query, temp_file_path)
 
 
-@app.get("/chat/chatgpt/{query}")
+@app.get("/api/chat/chatgpt/{query}")
 def chat_chatgpt(query: str):
     return chroma_chatgpt.generate_prompt(query, temp_file_path)
 
 
-if __name__ == "__main__":
-    uvicorn.run(app, port=8000)
 
 
