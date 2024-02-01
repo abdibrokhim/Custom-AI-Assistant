@@ -14,9 +14,9 @@ const App = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationSeverity, setNotificationSeverity] = useState({severity: "info", message: "Test notification"});
 
-  let chatCohereURL = `http://0.0.0.0:10000/chat/cohere/${input}`;
-  let chatChatGPTURL = `http://0.0.0.0:10000/chat/chatgpt/${input}`;
-  let uploadURL = `http://0.0.0.0:10000/upload`;
+  let chatCohereURL = `http://0.0.0.0:10000/api/chat/cohere/${input}`;
+  let chatChatGPTURL = `http://0.0.0.0:10000/api/chat/chatgpt/${input}`;
+  let uploadURL = `https://pdfcruncher.onrender.com/api/upload`;
 
   const showNotification = (severity) => {
     setNotificationSeverity(severity);
@@ -59,6 +59,8 @@ const App = () => {
         'Content-Type': 'multipart/form-data',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Headers': 'Content-Type , Authorization',
+        'Access-Control-Allow-Credentials': 'true'
       },
       body: formData
     })

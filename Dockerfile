@@ -8,4 +8,4 @@ RUN pip install --upgrade pip && \
     pip install -r /index/requirements.txt
 
 # Copy the rest of the application
-COPY ./api /app
+COPY ./api /index
