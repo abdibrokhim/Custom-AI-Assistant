@@ -14,9 +14,9 @@ const App = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationSeverity, setNotificationSeverity] = useState({severity: "info", message: "Test notification"});
 
-  let chatCohereURL = `https://127.0.0.1:8000/api/chat/cohere/${input}`;
-  let chatChatGPTURL = `https://127.0.0.1:8000/api/chat/chatgpt/${input}`;
-  let uploadURL = `https://127.0.0.1:8000/api/upload`;
+  let chatCohereURL = `http://0.0.0.0:10000/chat/cohere/${input}`;
+  let chatChatGPTURL = `http://0.0.0.0:10000/chat/chatgpt/${input}`;
+  let uploadURL = `http://0.0.0.0:10000/upload`;
 
   const showNotification = (severity) => {
     setNotificationSeverity(severity);
@@ -55,7 +55,10 @@ const App = () => {
     fetch(uploadURL, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST',
       },
       body: formData
     })
@@ -94,6 +97,7 @@ const App = () => {
       method: 'GET',  
       headers: {
           'Accept': 'application/json'
+
         }
       })
       .then(response => {
