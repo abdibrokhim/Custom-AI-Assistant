@@ -47,5 +47,5 @@ async def upload_file(file: UploadFile = File(...)):
 def chat_chatgpt(query: str):
     return chroma_chatgpt.generate_prompt(query, temp_file_path)
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=8000)
