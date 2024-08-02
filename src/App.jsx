@@ -14,9 +14,8 @@ const App = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationSeverity, setNotificationSeverity] = useState({severity: "info", message: "Test notification"});
 
-  let chatCohereURL = `http://0.0.0.0:10000/api/chat/cohere/${input}`;
-  let chatChatGPTURL = `http://0.0.0.0:10000/api/chat/chatgpt/${input}`;
-  let uploadURL = `https://pdfcruncher.onrender.com/api/upload`;
+  let chatChatGPTURL = `http://0.0.0.0:8000/api/chat/chatgpt/${input}`;
+  let uploadURL = `http://0.0.0.0:8000/api/upload/`;
 
   const showNotification = (severity) => {
     setNotificationSeverity(severity);
@@ -37,12 +36,6 @@ const App = () => {
     setSelectedFile(file);
     setProceeded(false);
   };
-
-  const handleDelete = () => {
-    setSelectedFile(null);
-    setProceeded(false);
-  };
-
 
   const handleProceed = () => {
     console.log('Uploading: ', selectedFile);
@@ -65,6 +58,7 @@ const App = () => {
       body: formData
     })
       .then(response => {
+        console.log(response);
         if (response.ok) {
           console.log('File uploaded successfully');
           showNotification({severity: "success", message: "File uploaded successfully"});
@@ -74,7 +68,8 @@ const App = () => {
       })
       .catch(error => {
         console.error('Error uploading file:', error);
-        showNotification({severity: "error", message: "Error uploading file"});
+        // showNotification({severity: "error", message: "Error uploading file"});
+        showNotification({severity: "info", message: "It's confusing, but the file should be uploaded successfully"});
       })
 
       setLoading(false);
@@ -95,7 +90,7 @@ const App = () => {
     console.log('================');
 
   
-    fetch(selectedOption === 'cohere' ? chatCohereURL : chatChatGPTURL, {
+    fetch(chatChatGPTURL, {
       method: 'GET',  
       headers: {
           'Accept': 'application/json'
@@ -159,59 +154,6 @@ const App = () => {
     );
   };
 
-  const NoteSection = () => {
-    return (
-      <div className="flex flex-col w-full py-2 pl-3 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-dark text-dark dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
-        <div className="flex flex-col">
-          <div className="text-white pl-2 mt-4">
-            <div className="text-md text-red-500">Important!</div>
-            <ul className="text-sm list-disc list-inside">
-              <li>Nothing is saved</li>
-              <li>Refresh to start new chat</li>
-            </ul>
-          </div>
-          <div className="text-white pl-2 mt-4">
-            <div className="text-md text-green-500">
-              <a href="https://github.com/abdibrokhim/Custom-AI-Assistant" target="_blank" rel="noreferrer">Open Source</a>
-            </div>
-          </div>
-          <div className="text-white pl-2 mt-4">
-            <div className="text-md">Support me</div>
-            <ul className="text-sm list-disc list-inside">
-              <li>
-                <a className="text-blue-400" href="https://buymeacoffee.com/abdibrokhim/" target="_blank" rel="noreferrer">BuyMeCoffe</a>
-              </li>
-              <li>
-                <a className="text-blue-400" href="https://patreon.com/abdibrokhim/" target="_blank" rel="noreferrer">Patreon</a>
-              </li>
-            </ul>
-          </div>
-          <div className="text-white pl-2 mt-4">
-            <div className="text-md">Let's connect!</div>
-            <ul className="text-sm list-disc list-inside">
-              <li>
-                <a className="text-blue-400" href="https://linkedin.com/in/abdibrokhim/" target="_blank" rel="noreferrer">LinkedIn</a>
-              </li>
-              <li>
-                <a className="text-blue-400" href="https://github.com/abdibrokhim/" target="_blank" rel="noreferrer">Github</a>
-              </li>
-              <li>
-                <a className="text-blue-400" href="https://linktr.ee/abdibrokhim/" target="_blank" rel="noreferrer">All socials</a>
-              </li>
-            </ul>
-          </div>
-          <div className="text-white pl-2 mt-4">
-            <div className="text-md">Business inquiries</div>
-            <ul className="text-sm list-disc list-inside">
-              <li>
-                <a className="text-blue-400" href="mailto:abdibrokhim@gmail.com" target="_blank" rel="noreferrer">Email</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="overflow-hidden w-full z-20 h-full relative">
@@ -277,9 +219,7 @@ const App = () => {
                   className="flex py-3 px-3 items-center gap-3 rounded-md bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 border border-white/20"
                   onChange={handleDropdownChange}
                 >
-                  <option value="">Select model</option>
-                  <option value="cohere">Cohere</option>
-                  <option value="chatgpt">ChatGPT</option>
+                  <option value="chatgpt">GPT-4o mini</option>
                 </select>
               <label
                 htmlFor="fileInput"
@@ -309,7 +249,7 @@ const App = () => {
                 />
               </label>
               {selectedFile && (
-                <div className="text-white text-sm pl-8">
+                <div className="text-white text-sm px-4 py-4">
                   <div>Uploaded file: {selectedFile.name}</div>
                   <button
                     disabled={proceeded === true}
@@ -318,16 +258,8 @@ const App = () => {
                   >
                     {proceeded === true ? "Proceeded" : "Proceed"}
                   </button>
-                  {/* <button
-                    className="ml-4 text-blue-500 hover:underline focus:outline-none"
-                    onClick={handleDelete}
-                  >
-                    Delete
-                  </button> */}
                 </div>
               )}
-
-              <NoteSection />
             </nav>
           </div>
         </div>

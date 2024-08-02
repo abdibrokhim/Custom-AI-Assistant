@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 import uvicorn
-import chroma_cohere, chroma_chatgpt
+import chroma_chatgpt
 from tempfile import NamedTemporaryFile
 import os
 
@@ -43,15 +43,9 @@ async def upload_file(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/api/chat/cohere/{query}")
-def chat_cohere(query: str):
-    return chroma_cohere.generate_prompt(query, temp_file_path)
-
-
 @app.get("/api/chat/chatgpt/{query}")
 def chat_chatgpt(query: str):
     return chroma_chatgpt.generate_prompt(query, temp_file_path)
 
-
-
-
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
